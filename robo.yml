@@ -1,0 +1,8 @@
+sites:
+- koplowicz.com
+- koplowiczandsons.com
+- anneisaacs.com
+commands:
+  update all contrib modules: drush up
+  run database updates: drush updb -y
+  clear caches: drush cc all
