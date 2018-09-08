@@ -1,0 +1,15 @@
+{
+    "name": "koppie/updateallthedrupals",
+    "description": "Update script that automatically runs against all your Drupal sites",
+    "type": "project",
+    "require": {
+        "consolidation/robo": "^1.3"
+    },
+    "license": "GPL3",
+    "authors": [
+        {
+            "name": "Batman",
+            "email": "jordan@koplowicz.com"
+        }
+    ]
+}
