@@ -6,24 +6,32 @@
  */
 use Robo\Contract\ConfigAwareInterface;
 use Robo\Common\ConfigAwareTrait;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class RoboFile extends \Robo\Tasks implements ConfigAwareInterface
 {
-    use ConfigAwareTrait;
+  use ConfigAwareTrait;
 
-  function updateme () {
+  function updateme ($opts = ['path' => null]) {
     // New way of printing output.
-    $io = new Symfony\Component\Console\Style\SymfonyStyle($this->input(), $this->output());
-    $io->title("UPDATE ALL THE THINGS!!!");
+    $io = new SymfonyStyle($this->input(), $this->output());
+    $io->title('UPDATE ALL THE THINGS!!!');
 
     // Load variables from robo.yml.
-    $opts = $this->getConfig()->export();
-    $path = $opts["path_to_root"];
-    $drush = $opts["path_to_drush"];
+    $config = $this->getConfig()->export();
+    $path = $opts['path'] ?: $config['path_to_root'];
+    $drush = $path . '/vendor/bin/drush';
+
+    // Figure out where the webroot is, using composer.json.
+    $composer = json_decode(file_get_contents($path . '/composer.json'), true);
+    $webroot = $composer['extra']['drupal']['webroot'];
+
+    // Composer install.
+    $this->taskExec('composer install')->run();
 
     // Move to the sites directory.
     chdir($path);
-    $sitesDir = $path . '/sites';
+    $sitesDir = $webroot . '/sites';
     $sites = array_filter(
       scandir($sitesDir),
       function ($item) use ($sitesDir) {
@@ -40,6 +48,6 @@ class RoboFile extends \Robo\Tasks implements ConfigAwareInterface
       $this->taskExec($drush . ' deploy')->run();
     }
 
-    $io->success("All done!  Pat yourself on the back for a job well done.");
+    $io->success('All done!  Pat yourself on the back for a job well done.');
   }
 }

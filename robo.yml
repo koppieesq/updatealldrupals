@@ -1,2 +1,1 @@
-path_to_root: /var/www/html
-path_to_drush: /var/www/html/vendor/bin/drush
+path_to_root: /var/www/d10/kands-d10
