@@ -6,27 +6,35 @@
  */
 class RoboFile extends \Robo\Tasks
 {
-  function updateme ($path) {
-    $this->io()->title("UPDATE ALL THE THINGS!!!");
+  function updateme () {
+    // New way of printing output.
+    $io = new Symfony\Component\Console\Style\SymfonyStyle($this->input(), $this->output());
+    $io->title("UPDATE ALL THE THINGS!!!");
 
-    // Load sites, commands, and path to webroot
-    $sites = $opts["sites"];
-    $commands = $opts["commands"];
-    $path = $path ? $path : "/var/www/d7/sites";
+    // Load variables from robo.yml.
+    $opts = $this->getConfig();
+    $path = $opts["path_to_root"];
+    $drush = $opts["path_to_drush"];
 
     // Move to the sites directory.
+    chdir($path);
+    $sitesDir = $path . '/sites';
+    $sites = array_filter(
+      scandir($sitesDir),
+      function ($item) use ($sitesDir) {
+        return $item !== '.' && $item !== '..' && is_dir($sitesDir . '/' . $item);
+      }
+    );
 
     foreach ($sites as $site) {
-      $this->io()->section($site);
+      $io->section($site);
       // Move to the site subdirectory
+      chdir($sitesDir . '/' . $site);
 
       // Run commands in sequence.
-      foreach ($commands as $key => $value) {
-        $this->say($key);
-        $this->_exec($value);
-      }
+      $this->taskExec($drush . ' deploy')->run();
     }
 
-    $this->io()->info("All done!  Pat yourself on the back for a job well done.");
+    $io->success("All done!  Pat yourself on the back for a job well done.");
   }
 }
