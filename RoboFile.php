@@ -4,15 +4,20 @@
  *
  * @see http://robo.li/
  */
-class RoboFile extends \Robo\Tasks
+use Robo\Contract\ConfigAwareInterface;
+use Robo\Common\ConfigAwareTrait;
+
+class RoboFile extends \Robo\Tasks implements ConfigAwareInterface
 {
+    use ConfigAwareTrait;
+
   function updateme () {
     // New way of printing output.
     $io = new Symfony\Component\Console\Style\SymfonyStyle($this->input(), $this->output());
     $io->title("UPDATE ALL THE THINGS!!!");
 
     // Load variables from robo.yml.
-    $opts = $this->getConfig();
+    $opts = $this->getConfig()->export();
     $path = $opts["path_to_root"];
     $drush = $opts["path_to_drush"];
 
