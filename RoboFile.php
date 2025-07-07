@@ -44,7 +44,9 @@ class RoboFile extends \Robo\Tasks implements ConfigAwareInterface
     foreach ($sites as $site) {
       $io->section($site);
       // Move to the site subdirectory
-      chdir($sitesDir . '/' . $site);
+      $sitePath = $sitesDir . '/' . $site;
+      $io->info('Moving to ' . $sitePath);
+      chdir($sitePath);
 
       // Pull commands from robo.yml, and run in sequence.
       if (!empty($commands) && is_array($commands)) {
