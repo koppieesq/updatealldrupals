@@ -32,8 +32,8 @@ class RoboFile extends \Robo\Tasks implements ConfigAwareInterface
     // Composer install.
     $this->taskExec('composer install')->run();
 
-    // Move to the sites directory.
-    $sitesDir = $path . $webroot . 'sites';
+    // Move to the sites directory.  Note that webroot probably has a trailing slash.
+    $sitesDir = $path . '/' . $webroot . 'sites';
     $sites = array_filter(
       scandir($sitesDir),
       function ($item) use ($sitesDir) {
