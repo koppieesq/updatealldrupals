@@ -21,6 +21,7 @@ class RoboFile extends \Robo\Tasks implements ConfigAwareInterface
     $config = $this->getConfig()->export();
     $path = $opts['path'] ?: $config['path_to_root'];
     $drush = $path . '/vendor/bin/drush';
+    $commands = $config['commands'];
 
     // Figure out where the webroot is, using composer.json.
     $composer = json_decode(file_get_contents($path . '/composer.json'), true);
@@ -44,8 +45,12 @@ class RoboFile extends \Robo\Tasks implements ConfigAwareInterface
       // Move to the site subdirectory
       chdir($sitesDir . '/' . $site);
 
-      // Run commands in sequence.
-      $this->taskExec($drush . ' deploy')->run();
+      // Pull commands from robo.yml, and run in sequence.
+      if (!empty($commands) && is_array($commands)) {
+        foreach ($commands as $cmd) {
+          $this->taskExec($drush . ' ' . $cmd)->run();
+        }
+      }
     }
 
     $io->success('All done!  Pat yourself on the back for a job well done.');
