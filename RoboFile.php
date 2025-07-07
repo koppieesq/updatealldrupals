@@ -24,7 +24,7 @@ class RoboFile extends \Robo\Tasks implements ConfigAwareInterface
 
     // Figure out where the webroot is, using composer.json.
     $composer = json_decode(file_get_contents($path . '/composer.json'), true);
-    $webroot = $composer['extra']['drupal']['webroot'];
+    $webroot = $composer['extra']['drupal-scaffold']['locations']['web-root'];
 
     // Composer install.
     $this->taskExec('composer install')->run();
