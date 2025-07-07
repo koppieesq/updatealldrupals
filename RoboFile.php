@@ -33,7 +33,7 @@ class RoboFile extends \Robo\Tasks implements ConfigAwareInterface
     // Move to the sites directory.
     $io->info('Moving to sites directory...');
     chdir($path);
-    $sitesDir = $webroot . '/sites';
+    $sitesDir = $path . $webroot . 'sites';
     $sites = array_filter(
       scandir($sitesDir),
       function ($item) use ($sitesDir) {
