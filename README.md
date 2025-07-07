@@ -5,7 +5,7 @@ A Robo script to automate updates for all sites in a Drupal multisite installati
 ## Features
 
 - Runs `composer install` to ensure dependencies are up to date.
-- Executes `drush deploy` for every site in the multisite, streamlining multiple deployment steps into a single command.
+- Executes several basic Drush commands for every site in the multisite.
 
 ## Requirements
 
@@ -16,26 +16,27 @@ A Robo script to automate updates for all sites in a Drupal multisite installati
 
 ## Usage
 
-1. Clone or download this repository.
+1. Clone or download this repository.  (You can install this anywhere you like, but keep it out of the webroot.)
 2. Install dependencies:
    ```bash
    composer install
    ```
 3. Run the Robo task to update all sites:
    ```bash
-   vendor/bin/robo update:all
+   vendor/bin/robo updateme
    ```
-   (Adjust the command if your Robo task uses a different name.)
 
 This will:
 - Install/update Composer dependencies.
-- Run `drush deploy` for each multisite, applying database updates, config imports, and other deployment tasks as defined.
+- Run `drush updb -y` for each site, to run database updates.
+- Run `drush cr` for each site, to clear the cache.
 
 ## Configuration
 
 - Ensure your multisite structure is set up according to Drupal standards.
 - Edit `robo.yml` or `RoboFile.php` if you need to customize site discovery or deployment steps.
+- **Easy Mode:** Add a flag to the command line: `vendor/bin/robo updateme --path=/path/to/multisite`
 
 ## License
 
-MIT
+GPL3
