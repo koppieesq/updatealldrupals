@@ -24,6 +24,8 @@ class RoboFile extends \Robo\Tasks implements ConfigAwareInterface
     $commands = $config['commands'];
 
     // Figure out where the webroot is, using composer.json.
+    $io->info('Moving to directory: ' . $path);
+    chdir($path);
     $composer = json_decode(file_get_contents($path . '/composer.json'), true);
     $webroot = $composer['extra']['drupal-scaffold']['locations']['web-root'];
 
@@ -31,8 +33,6 @@ class RoboFile extends \Robo\Tasks implements ConfigAwareInterface
     $this->taskExec('composer install')->run();
 
     // Move to the sites directory.
-    $io->info('Moving to directory: ' . $path);
-    chdir($path);
     $sitesDir = $path . $webroot . 'sites';
     $sites = array_filter(
       scandir($sitesDir),
