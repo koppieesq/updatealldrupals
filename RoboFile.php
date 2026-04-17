@@ -48,6 +48,18 @@ class RoboFile extends \Robo\Tasks implements ConfigAwareInterface
       $io->info('Moving to ' . $sitePath);
       chdir($sitePath);
 
+      // Forcibly clear Drupal file cache directories using sudo.
+      $io->info('Clearing cache directories for site: ' . $site);
+      $cacheDirs = ['php', 'css', 'js'];
+      foreach ($cacheDirs as $cacheDir) {
+        $fullPath = $sitePath . '/' . $cacheDir;
+        $io->text('  Removing: ' . $fullPath);
+        $this->taskExec('sudo rm -rf ' . escapeshellarg($fullPath))->run();
+        $this->taskExec('sudo mkdir -p ' . escapeshellarg($fullPath))->run();
+        $this->taskExec('sudo chmod 755 ' . escapeshellarg($fullPath))->run();
+        $this->taskExec('sudo chown www-data:www-data ' . escapeshellarg($fullPath))->run();
+      }
+
       // Pull commands from robo.yml, and run in sequence.
       if (!empty($commands) && is_array($commands)) {
         foreach ($commands as $cmd) {
