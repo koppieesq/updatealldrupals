@@ -52,7 +52,7 @@ class RoboFile extends \Robo\Tasks implements ConfigAwareInterface
       $io->info('Clearing cache directories for site: ' . $site);
       $cacheDirs = ['php', 'css', 'js'];
       foreach ($cacheDirs as $cacheDir) {
-        $fullPath = $sitePath . '/' . $cacheDir;
+        $fullPath = $sitePath . '/files/' . $cacheDir;
         $io->text('  Removing: ' . $fullPath);
         $this->taskExec('sudo rm -rf ' . escapeshellarg($fullPath))->run();
         $this->taskExec('sudo mkdir -p ' . escapeshellarg($fullPath))->run();
