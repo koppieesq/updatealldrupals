@@ -1,4 +1,5 @@
 path_to_root: /var/www/d10/kands-d10
 commands:
   - 'updb -y'
+  - 'state:set system.maintenance_mode 0 --input-format=integer'
   - 'cr'
